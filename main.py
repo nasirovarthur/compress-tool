@@ -155,7 +155,7 @@ class App(ctk.CTk):
                                            variable=self.do_convert, command=self.toggle_convert_ui,
                                            font=FONT_BTN, text_color=COLOR_TEXT_MAIN,
                                            fg_color=COLOR_ACTIVE_TAB, hover_color=COLOR_ACTIVE_TAB_HOVER,
-                                           checkmark_color="#", border_color=COLOR_ACCENT,
+                                           checkmark_color="#ffffff", border_color=COLOR_ACCENT_HOVER,
                                            corner_radius=6, border_width=1)
         self.chk_convert.pack(pady=10, padx=20, anchor="w")
 
