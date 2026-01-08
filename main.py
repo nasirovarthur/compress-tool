@@ -26,10 +26,10 @@ COLOR_TEXT_MAIN = "#FFFFFF"
 COLOR_TEXT_SEC = "#8899A6"
 COLOR_BORDER = "#1A3630"
 
-FONT_HEADER = ("Arial", 28, "bold")
-FONT_SUBHEADER = ("Arial", 18, "bold")
-FONT_BODY = ("Arial", 14)
-FONT_BTN = ("Arial", 15, "bold")
+FONT_HEADER = ("Manrope", 28, "bold")
+FONT_SUBHEADER = ("Manrope", 18, "bold")
+FONT_BODY = ("Manrope", 14)
+FONT_BTN = ("Manrope", 15, "bold")
 
 ctk.set_appearance_mode("Dark")
 ctk.set_default_color_theme("dark-blue")
@@ -40,7 +40,8 @@ class App(ctk.CTk):
         super().__init__()
 
         self.title("VB Compress")
-        self.geometry("480x820")
+        self.geometry("480x900")
+        self.resizable(False, False)
         self.configure(fg_color=COLOR_BG_APP)
 
         self.img_files = []
@@ -81,8 +82,8 @@ class App(ctk.CTk):
 
         self.tabview._segmented_button.configure(width=tab_width, height=45, font=FONT_BTN)
 
-        self.tabview._segmented_button._buttons_dict["Images"].configure(text_color_disabled="#000000")
-        self.tabview._segmented_button._buttons_dict["PDF"].configure(text_color_disabled="#000000")
+        for btn in self.tabview._segmented_button._buttons_dict.values():
+            btn.configure(width=(tab_width - 20) / 3, text_color_disabled="#000000")
 
         self.setup_img_ui()
         self.setup_pdf_ui()
@@ -95,7 +96,7 @@ class App(ctk.CTk):
     def create_custom_button(self, parent, text, command, primary=False):
         if primary:
             return ctk.CTkButton(parent, text=text, command=command,
-                                 font=("Arial", 18, "bold"),
+                                 font=("Manrope", 18, "bold"),
                                  fg_color=COLOR_ACCENT, hover_color=COLOR_ACCENT_HOVER,
                                  text_color="#000000",
                                  height=65,
@@ -120,9 +121,17 @@ class App(ctk.CTk):
         self.btn_img_folder = self.create_custom_button(btn_box, "Choose Folder", self.select_img_folder, primary=False)
         self.btn_img_folder.pack(side="right", fill="x", expand=True, padx=(5, 0))
 
-        self.lbl_img_status = ctk.CTkLabel(card_files, text="No files selected", font=FONT_BODY,
+        status_box = ctk.CTkFrame(card_files, fg_color="transparent")
+        status_box.pack(pady=(0, 20))
+
+        self.lbl_img_status = ctk.CTkLabel(status_box, text="No files selected", font=FONT_BODY,
                                            text_color=COLOR_TEXT_SEC)
-        self.lbl_img_status.pack(pady=(0, 20))
+        self.lbl_img_status.pack(side="left", padx=(0, 10))
+
+        ctk.CTkButton(status_box, text="Reset", width=60, height=24,
+                      fg_color=COLOR_BTN_SEC, hover_color=COLOR_BTN_SEC_HOVER,
+                      text_color=COLOR_TEXT_MAIN, font=("Manrope", 12),
+                      command=self.reset_img_selection).pack(side="left")
 
         card_settings = self.create_card(self.tab_img)
         ctk.CTkLabel(card_settings, text="Preferences", font=FONT_SUBHEADER, text_color=COLOR_TEXT_MAIN).pack(
@@ -146,7 +155,7 @@ class App(ctk.CTk):
                                            variable=self.do_convert, command=self.toggle_convert_ui,
                                            font=FONT_BTN, text_color=COLOR_TEXT_MAIN,
                                            fg_color=COLOR_ACTIVE_TAB, hover_color=COLOR_ACTIVE_TAB_HOVER,
-                                           checkmark_color="#000000", border_color=COLOR_ACCENT,
+                                           checkmark_color="#", border_color=COLOR_ACCENT,
                                            corner_radius=6, border_width=1)
         self.chk_convert.pack(pady=10, padx=20, anchor="w")
 
@@ -192,9 +201,17 @@ class App(ctk.CTk):
         self.btn_pdf_file = self.create_custom_button(card_files, "Choose PDF File", self.select_pdf_files, primary=False)
         self.btn_pdf_file.pack(fill="x", padx=15, pady=(0, 20))
 
-        self.lbl_pdf_status = ctk.CTkLabel(card_files, text="No file selected", font=FONT_BODY,
+        status_box = ctk.CTkFrame(card_files, fg_color="transparent")
+        status_box.pack(pady=(0, 20))
+
+        self.lbl_pdf_status = ctk.CTkLabel(status_box, text="No file selected", font=FONT_BODY,
                                            text_color=COLOR_TEXT_SEC)
-        self.lbl_pdf_status.pack(pady=(0, 20))
+        self.lbl_pdf_status.pack(side="left", padx=(0, 10))
+
+        ctk.CTkButton(status_box, text="Reset", width=60, height=24,
+                      fg_color=COLOR_BTN_SEC, hover_color=COLOR_BTN_SEC_HOVER,
+                      text_color=COLOR_TEXT_MAIN, font=("Manrope", 12),
+                      command=self.reset_pdf_selection).pack(side="left")
 
         card_settings = self.create_card(self.tab_pdf)
         ctk.CTkLabel(card_settings, text="Compression Level", font=FONT_SUBHEADER, text_color=COLOR_TEXT_MAIN).pack(
@@ -292,6 +309,14 @@ class App(ctk.CTk):
                 self.lbl_pdf_status.configure(text=f"{len(filtered)} files selected", text_color=COLOR_ACCENT)
             else:
                 messagebox.showinfo("Info", "No valid PDF selected.")
+
+    def reset_img_selection(self):
+        self.img_files = []
+        self.lbl_img_status.configure(text="No files selected", text_color=COLOR_TEXT_SEC)
+
+    def reset_pdf_selection(self):
+        self.pdf_files = []
+        self.lbl_pdf_status.configure(text="No file selected", text_color=COLOR_TEXT_SEC)
 
     def process_img(self):
         if not self.img_files:
