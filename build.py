@@ -6,13 +6,12 @@ ctk_path = os.path.dirname(customtkinter.__file__)
 
 PyInstaller.__main__.run([
     'main.py',
-    '--name=Compress',
+    '--name=VB Compress',
     '--noconsole',
     '--windowed',
     '--clean',
+    '--icon=icon.icns',  # <--- ДОБАВИЛИ СЮДА (обязательно формат .icns для Mac)
 
     f'--add-data={ctk_path}:customtkinter',
-
     '--add-data=Logo.png:.',
-
 ])

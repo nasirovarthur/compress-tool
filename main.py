@@ -1,26 +1,31 @@
 import customtkinter as ctk
 from tkinter import filedialog, messagebox
 import os
-from PIL import Image  # pip install Pillow
-import fitz  # pip install pymupdf
+from PIL import Image
+import fitz
+import sys
 
-# --- UBER DARK PALETTE ---
-COLOR_BG_APP = "#01110E"  # Фон приложения
-COLOR_CARD = "#081F1A"  # Фон карточек
-COLOR_ACCENT = "#FFFFFF"  # Белый акцент
+def resource_path(relative_path):
+    try:
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+    return os.path.join(base_path, relative_path)
+
+COLOR_BG_APP = "#01110E"
+COLOR_CARD = "#081F1A"
+COLOR_ACCENT = "#FFFFFF"
 COLOR_ACCENT_HOVER = "#E0E0E0"
 
-# Активные элементы (Табы)
-COLOR_ACTIVE_TAB = "#03BD8E"  # Мятный
+COLOR_ACTIVE_TAB = "#03BD8E"
 COLOR_ACTIVE_TAB_HOVER = "#029E76"
 
-COLOR_BTN_SEC = "#112924"  # Вторичные кнопки
+COLOR_BTN_SEC = "#112924"
 COLOR_BTN_SEC_HOVER = "#1A3630"
 COLOR_TEXT_MAIN = "#FFFFFF"
 COLOR_TEXT_SEC = "#8899A6"
 COLOR_BORDER = "#1A3630"
 
-# Шрифты
 FONT_HEADER = ("Arial", 28, "bold")
 FONT_SUBHEADER = ("Arial", 18, "bold")
 FONT_BODY = ("Arial", 14)
@@ -34,18 +39,15 @@ class App(ctk.CTk):
     def __init__(self):
         super().__init__()
 
-        self.title("UberCompress Dark")
+        self.title("VB Compress")
         self.geometry("480x820")
         self.configure(fg_color=COLOR_BG_APP)
 
         self.img_files = []
         self.pdf_files = []
 
-        # --- 1. ЛОГОТИП (LOGO.PNG) ---
-        # SVG не поддерживается стандартным Pillow. Используй PNG!
         try:
-            pil_image = Image.open("Logo.png")
-            # Подгоняем размер (Высота 50px, ширина авто)
+            pil_image = Image.open(resource_path("Logo.png"))
             ratio = pil_image.width / pil_image.height
             new_h = 50
             new_w = int(new_h * ratio)
@@ -54,27 +56,21 @@ class App(ctk.CTk):
             self.lbl_logo = ctk.CTkLabel(self, text="", image=self.logo_img)
             self.lbl_logo.pack(pady=(40, 20), anchor="center")
         except Exception as e:
-            # Если картинки нет, показываем красивый текст
-            print(f"Logo not found or error: {e}")
+            print(f"Logo error: {e}")
             self.lbl_title = ctk.CTkLabel(self, text="Compress.", font=FONT_HEADER, text_color=COLOR_TEXT_MAIN)
             self.lbl_title.pack(pady=(40, 20), anchor="center")
 
-        # --- 2. ТАБЫ (Одинаковый размер 50/50) ---
-        # Ширина контейнера табов
         tab_width = 440
 
         self.tabview = ctk.CTkTabview(self,
                                       width=tab_width,
                                       height=620,
                                       fg_color="transparent",
-
-                                      # Цвета
                                       segmented_button_fg_color=COLOR_BTN_SEC,
                                       segmented_button_selected_color=COLOR_ACTIVE_TAB,
                                       segmented_button_selected_hover_color=COLOR_ACTIVE_TAB_HOVER,
                                       segmented_button_unselected_color=COLOR_BTN_SEC,
                                       segmented_button_unselected_hover_color=COLOR_BTN_SEC_HOVER,
-
                                       text_color=COLOR_TEXT_MAIN,
                                       corner_radius=20)
 
@@ -83,29 +79,21 @@ class App(ctk.CTk):
         self.tab_img = self.tabview.add("Images")
         self.tab_pdf = self.tabview.add("PDF")
 
-        # ХАК ДЛЯ РАВНОЙ ШИРИНЫ КНОПОК
-        # Мы принудительно ставим ширину внутренней кнопки равной ширине контейнера.
-        # Это заставляет кнопки растянуться и поделить место поровну.
         self.tabview._segmented_button.configure(width=tab_width, height=45, font=FONT_BTN)
 
-        # Цвет текста на активном табе (Черный для контраста с мятным)
         self.tabview._segmented_button._buttons_dict["Images"].configure(text_color_disabled="#000000")
         self.tabview._segmented_button._buttons_dict["PDF"].configure(text_color_disabled="#000000")
 
         self.setup_img_ui()
         self.setup_pdf_ui()
 
-    # ========================================================
-    # UI ПОМОЩНИКИ
-    # ========================================================
     def create_card(self, parent):
         card = ctk.CTkFrame(parent, fg_color=COLOR_CARD, corner_radius=16, border_width=0)
         card.pack(fill="x", pady=10, padx=10)
         return card
 
-    def create_uber_button(self, parent, text, command, primary=False):
+    def create_custom_button(self, parent, text, command, primary=False):
         if primary:
-            # ГЛАВНАЯ КНОПКА (Толстая 65px)
             return ctk.CTkButton(parent, text=text, command=command,
                                  font=("Arial", 18, "bold"),
                                  fg_color=COLOR_ACCENT, hover_color=COLOR_ACCENT_HOVER,
@@ -113,17 +101,12 @@ class App(ctk.CTk):
                                  height=65,
                                  corner_radius=12)
         else:
-            # ВТОРИЧНАЯ КНОПКА
             return ctk.CTkButton(parent, text=text, command=command,
                                  font=FONT_BTN,
                                  fg_color=COLOR_BTN_SEC, hover_color=COLOR_BTN_SEC_HOVER,
                                  text_color=COLOR_TEXT_MAIN, height=50, corner_radius=12)
 
-    # ========================================================
-    # 1. ИНТЕРФЕЙС: ИЗОБРАЖЕНИЯ
-    # ========================================================
     def setup_img_ui(self):
-        # Файлы
         card_files = self.create_card(self.tab_img)
         ctk.CTkLabel(card_files, text="Select Content", font=FONT_SUBHEADER, text_color=COLOR_TEXT_MAIN).pack(
             anchor="w", padx=20, pady=(20, 10))
@@ -131,17 +114,16 @@ class App(ctk.CTk):
         btn_box = ctk.CTkFrame(card_files, fg_color="transparent")
         btn_box.pack(fill="x", padx=15, pady=(0, 20))
 
-        self.btn_img_file = self.create_uber_button(btn_box, "Choose Files", self.select_img_files, primary=False)
+        self.btn_img_file = self.create_custom_button(btn_box, "Choose Files", self.select_img_files, primary=False)
         self.btn_img_file.pack(side="left", fill="x", expand=True, padx=(0, 5))
 
-        self.btn_img_folder = self.create_uber_button(btn_box, "Choose Folder", self.select_img_folder, primary=False)
+        self.btn_img_folder = self.create_custom_button(btn_box, "Choose Folder", self.select_img_folder, primary=False)
         self.btn_img_folder.pack(side="right", fill="x", expand=True, padx=(5, 0))
 
         self.lbl_img_status = ctk.CTkLabel(card_files, text="No files selected", font=FONT_BODY,
                                            text_color=COLOR_TEXT_SEC)
         self.lbl_img_status.pack(pady=(0, 20))
 
-        # Настройки
         card_settings = self.create_card(self.tab_img)
         ctk.CTkLabel(card_settings, text="Preferences", font=FONT_SUBHEADER, text_color=COLOR_TEXT_MAIN).pack(
             anchor="w", padx=20, pady=(20, 10))
@@ -159,7 +141,6 @@ class App(ctk.CTk):
                                             text_color=COLOR_TEXT_SEC)
         self.lbl_img_quality.pack(pady=(0, 20))
 
-        # Чекбокс
         self.do_convert = ctk.BooleanVar(value=False)
         self.chk_convert = ctk.CTkCheckBox(card_settings, text="Change Format",
                                            variable=self.do_convert, command=self.toggle_convert_ui,
@@ -189,7 +170,6 @@ class App(ctk.CTk):
         self.combo_out.set("WEBP")
         self.combo_out.pack(side="left", padx=(10, 0))
 
-        # Путь
         card_path = self.create_card(self.tab_img)
         self.entry_img_path = ctk.CTkEntry(card_path, placeholder_text="Save location...",
                                            fg_color=COLOR_BTN_SEC, border_width=0, text_color=COLOR_TEXT_MAIN,
@@ -201,19 +181,15 @@ class App(ctk.CTk):
                       fg_color=COLOR_BTN_SEC, hover_color=COLOR_BTN_SEC_HOVER, text_color=COLOR_TEXT_MAIN,
                       command=lambda: self.choose_path(self.entry_img_path)).pack(side="right", padx=(0, 15))
 
-        # START BUTTON
-        self.btn_start_img = self.create_uber_button(self.tab_img, "Compress Images", self.process_img, primary=True)
+        self.btn_start_img = self.create_custom_button(self.tab_img, "Compress Images", self.process_img, primary=True)
         self.btn_start_img.pack(fill="x", pady=20, padx=10, side="bottom")
 
-    # ========================================================
-    # 2. ИНТЕРФЕЙС: PDF
-    # ========================================================
     def setup_pdf_ui(self):
         card_files = self.create_card(self.tab_pdf)
         ctk.CTkLabel(card_files, text="Select Document", font=FONT_SUBHEADER, text_color=COLOR_TEXT_MAIN).pack(
             anchor="w", padx=20, pady=(20, 10))
 
-        self.btn_pdf_file = self.create_uber_button(card_files, "Choose PDF File", self.select_pdf_files, primary=False)
+        self.btn_pdf_file = self.create_custom_button(card_files, "Choose PDF File", self.select_pdf_files, primary=False)
         self.btn_pdf_file.pack(fill="x", padx=15, pady=(0, 20))
 
         self.lbl_pdf_status = ctk.CTkLabel(card_files, text="No file selected", font=FONT_BODY,
@@ -246,12 +222,9 @@ class App(ctk.CTk):
                       fg_color=COLOR_BTN_SEC, hover_color=COLOR_BTN_SEC_HOVER, text_color=COLOR_TEXT_MAIN,
                       command=lambda: self.choose_path(self.entry_pdf_path)).pack(side="right", padx=(0, 15))
 
-        self.btn_start_pdf = self.create_uber_button(self.tab_pdf, "Compress PDF", self.process_pdf, primary=True)
+        self.btn_start_pdf = self.create_custom_button(self.tab_pdf, "Compress PDF", self.process_pdf, primary=True)
         self.btn_start_pdf.pack(fill="x", pady=20, padx=10, side="bottom")
 
-    # ========================================================
-    # ЛОГИКА UI
-    # ========================================================
     def toggle_convert_ui(self):
         if self.do_convert.get():
             self.frame_selectors.pack(pady=(0, 15), padx=20, fill="x")
@@ -320,9 +293,6 @@ class App(ctk.CTk):
             else:
                 messagebox.showinfo("Info", "No valid PDF selected.")
 
-    # ========================================================
-    # LOGIC (Pillow & PyMuPDF)
-    # ========================================================
     def process_img(self):
         if not self.img_files:
             messagebox.showwarning("Warning", "Please select files first.")
