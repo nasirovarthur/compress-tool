@@ -10,7 +10,7 @@ PyInstaller.__main__.run([
     '--noconsole',
     '--windowed',
     '--clean',
-    '--icon=icon.icns',  # <--- ДОБАВИЛИ СЮДА (обязательно формат .icns для Mac)
+    '--icon=icon.icns',
 
     f'--add-data={ctk_path}:customtkinter',
     '--add-data=Logo.png:.',
