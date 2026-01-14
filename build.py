@@ -10,8 +10,12 @@ PyInstaller.__main__.run([
     '--noconsole',
     '--windowed',
     '--clean',
-    '--icon=icon.icns',
+    '--icon=icon.icns', # Убедитесь, что этот файл есть в папке!
 
+    # ГЛАВНОЕ: Собираем библиотеку Drag-and-Drop целиком
+    '--collect-all=tkinterdnd2',
+
+    # Добавляем ресурсы
     f'--add-data={ctk_path}:customtkinter',
     '--add-data=Logo.png:.',
 ])
