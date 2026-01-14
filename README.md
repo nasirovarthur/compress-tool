@@ -4,36 +4,36 @@
 ![Platform](https://img.shields.io/badge/Platform-macOS%20%7C%20Windows-lightgrey)
 ![License](https://img.shields.io/badge/License-MIT-green)
 
-VB Compress — современное приложение для оптимизации изображений и PDF-документов. Минималистичный темный UI и мощные алгоритмы сжатия.
+VB Compress — a modern application for optimizing images and PDF documents. Minimalist dark UI and powerful compression algorithms.
 
 ---
 
-## ✨ Основные возможности
+## ✨ Key Features
 
-- **Drag & Drop:** перетаскивание файлов и папок в окно приложения.  
-- **Изображения**
-    - Поддерживаемые форматы: `JPG`, `PNG`, `WEBP`.
-    - Умное сжатие с сохранением качества.
-    - Конвертация форматов на лету (например, `WEBP → JPG`).
+- **Drag & Drop:** drag and drop files and folders into the application window.
+- **Images**
+    - Supported formats: `JPG`, `PNG`, `WEBP`.
+    - Smart compression while maintaining quality.
+    - On-the-fly format conversion (e.g., `WEBP → JPG`).
 - **PDF**
-    - Сжатие сканов и документов.
-    - Настройка DPI для контроля качества и размера.
-- **Интерфейс**
-    - Темная тема, реализовано на `CustomTkinter`.
+    - Compression of scans and documents.
+    - DPI settings for controlling quality and size.
+- **Interface**
+    - Dark theme, implemented with `CustomTkinter`.
 
 ---
 
-## 🛠 Установка (для разработчиков)
+## 🛠 Installation (for developers)
 
-Требуется Python 3.11+.
+Requires Python 3.11+.
 
-1. Клонируйте репозиторий:
+1. Clone the repository:
 ```bash
 git clone https://github.com/your-username/compress-tool.git
 cd compress-tool
 ```
 
-2. Создайте и активируйте виртуальное окружение
+2. Create and activate a virtual environment
 
 macOS / Linux:
 ```bash
@@ -47,54 +47,54 @@ python -m venv .venv
 .venv\Scripts\activate
 ```
 
-3. Установите зависимости:
+3. Install dependencies:
 ```bash
 pip install -r requirements.txt
 ```
 
-4. Запуск:
+4. Run:
 ```bash
 python main.py
 ```
 
 ---
 
-## 📦 Сборка приложения
+## 📦 Building the Application
 
-Готовый скрипт для сборки:
+Ready-to-use build script:
 ```bash
 python build.py
 ```
-После сборки:
-- macOS: в папке `dist` появится `VB Compress.app`.
-- Windows: в папке `dist` появится `VB Compress.exe`.
+After building:
+- macOS: `VB Compress.app` will appear in the `dist` folder.
+- Windows: `VB Compress.exe` will appear in the `dist` folder.
 
 ---
 
-## 🚨 Открытие скачанного приложения
+## 🚨 Opening the Downloaded Application
 
-Поскольку приложение не подписано сертификатом разработчика:
+Since the application is not signed with a developer certificate:
 
 macOS
-- Правый клик по приложению → «Открыть» → подтвердите «Открыть».
+- Right-click the application → "Open" → confirm "Open".
 
 Windows (SmartScreen)
-- Нажмите «Подробнее» (More info) → «Выполнить в любом случае» (Run anyway).
+- Click "More info" → "Run anyway".
 
 ---
 
-## 🧩 Используемые технологии
+## 🧩 Technologies Used
 
-- CustomTkinter — UI  
-- TkinterDnD2 — Drag & Drop  
-- Pillow (PIL) — обработка изображений  
-- PyMuPDF — работа с PDF  
-- PyInstaller — сборка в .app / .exe
+- CustomTkinter — UI
+- TkinterDnD2 — Drag & Drop
+- Pillow (PIL) — image processing
+- PyMuPDF — PDF handling
+- PyInstaller — building into .app / .exe
 
 ---
 
-## 📄 Лицензия и автор
+## 📄 License and Author
 
 MIT License.
 
-Made with ❤️ by Arthur
+Made with ❤️ by Arthur.
