@@ -10,3 +10,8 @@ venv/
 .DS_Store
 Result_IMG/
 Result_PDF/
+.coverage
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+*.log

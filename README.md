@@ -1,100 +1,68 @@
-# VB Compress 🗜️
+# VB Compress
 
 ![Python](https://img.shields.io/badge/Python-3.11%2B-blue)
 ![Platform](https://img.shields.io/badge/Platform-macOS%20%7C%20Windows-lightgrey)
 ![License](https://img.shields.io/badge/License-MIT-green)
 
-VB Compress — a modern application for optimizing images and PDF documents. Minimalist dark UI and powerful compression algorithms.
+VB Compress is a desktop tool for compressing images and PDF documents with a dark CustomTkinter interface.
 
----
+## Features
 
-## ✨ Key Features
+- Drag and drop files into the app.
+- Recursively import image folders.
+- Compress `JPG`, `PNG`, and `WEBP` images.
+- Convert images between `JPG`, `PNG`, and `WEBP`.
+- Save duplicate filenames safely without overwriting previous output.
+- Optimize PDFs while preserving text and vector content.
+- Rasterize scanned PDFs with a DPI setting when smaller scan-style output is preferred.
+- Run long compression jobs in the background with progress and error reporting.
 
-- **Drag & Drop:** drag and drop files and folders into the application window.
-- **Images**
-    - Supported formats: `JPG`, `PNG`, `WEBP`.
-    - Smart compression while maintaining quality.
-    - On-the-fly format conversion (e.g., `WEBP → JPG`).
-- **PDF**
-    - Compression of scans and documents.
-    - DPI settings for controlling quality and size.
-- **Interface**
-    - Dark theme, implemented with `CustomTkinter`.
-
----
-
-## 🛠 Installation (for developers)
+## Installation
 
 Requires Python 3.11+.
 
-1. Clone the repository:
 ```bash
-git clone https://github.com/your-username/compress-tool.git
+git clone https://github.com/nasirovarthur/compress-tool.git
 cd compress-tool
-```
-
-2. Create and activate a virtual environment
-
-macOS / Linux:
-```bash
 python3 -m venv .venv
 source .venv/bin/activate
+python -m pip install -r requirements.txt
 ```
 
-Windows:
+On Windows:
+
 ```bash
 python -m venv .venv
 .venv\Scripts\activate
+python -m pip install -r requirements.txt
 ```
 
-3. Install dependencies:
-```bash
-pip install -r requirements.txt
-```
+## Run
 
-4. Run:
 ```bash
 python main.py
 ```
 
----
+## Test
 
-## 📦 Building the Application
+```bash
+python -m unittest discover -s tests
+```
 
-Ready-to-use build script:
+## Build
+
 ```bash
 python build.py
 ```
-After building:
-- macOS: `VB Compress.app` will appear in the `dist` folder.
-- Windows: `VB Compress.exe` will appear in the `dist` folder.
 
----
+Build outputs are written to `dist/`.
 
-## 🚨 Opening the Downloaded Application
+## Notes
 
-Since the application is not signed with a developer certificate:
+- macOS builds use `icon.icns` when it exists.
+- Windows builds use `icon.ico` when it exists.
+- The app is unsigned, so macOS Gatekeeper or Windows SmartScreen may show a warning on first launch.
 
-macOS
-- Right-click the application → "Open" → confirm "Open".
+## License
 
-Windows (SmartScreen)
-- Click "More info" → "Run anyway".
-
----
-
-## 🧩 Technologies Used
-
-- CustomTkinter — UI
-- TkinterDnD2 — Drag & Drop
-- Pillow (PIL) — image processing
-- PyMuPDF — PDF handling
-- PyInstaller — building into .app / .exe
-
----
-
-## 📄 License and Author
-
-MIT License.
-
-Made with ❤️ by Arthur.
+MIT. See [LICENSE](LICENSE).
