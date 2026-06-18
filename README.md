@@ -4,7 +4,12 @@
 ![Platform](https://img.shields.io/badge/Platform-macOS%20%7C%20Windows-lightgrey)
 ![License](https://img.shields.io/badge/License-MIT-green)
 
-VB Compress is a desktop tool for compressing images and PDF documents with a dark CustomTkinter interface.
+VB Compress is a desktop tool for compressing images and PDF documents.
+
+The repository currently contains two app shells:
+
+- `main.py` - the original Python / CustomTkinter app.
+- `SwiftUIApp/VBCompressSwift.swift` - the native macOS SwiftUI app.
 
 ## Features
 
@@ -49,10 +54,18 @@ python main.py
 python -m unittest discover -s tests
 ```
 
-## Build
+## Build Python App
 
 ```bash
 python build.py
+```
+
+## Build SwiftUI App
+
+The SwiftUI app is macOS-only and can be built without an Xcode project:
+
+```bash
+python build_swift.py
 ```
 
 Build outputs are written to `dist/`.
@@ -61,6 +74,7 @@ Build outputs are written to `dist/`.
 
 - macOS builds use `icon.icns` when it exists.
 - Windows builds use `icon.ico` when it exists.
+- The SwiftUI app builds only for macOS.
 - The app is unsigned, so macOS Gatekeeper or Windows SmartScreen may show a warning on first launch.
 
 ## License
