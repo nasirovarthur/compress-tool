@@ -1,3 +1,4 @@
+import fcntl
 import os
 import plistlib
 import shutil
@@ -13,6 +14,7 @@ APP_NAME = "VB Compress Swift"
 APP_DIR = DIST_DIR / f"{APP_NAME}.app"
 EXECUTABLE = "VBCompressSwift"
 BUNDLE_ID = "com.vbcompress.swift"
+LOCK_FILE = BUILD_DIR / ".build_swift.lock"
 
 
 def run(command):
@@ -84,9 +86,12 @@ def main():
     with (tmp_app_dir / "Contents" / "Info.plist").open("wb") as file:
         plistlib.dump(info, file)
 
-    if APP_DIR.exists():
-        shutil.rmtree(APP_DIR, ignore_errors=True)
-    os.replace(tmp_app_dir, APP_DIR)
+    with LOCK_FILE.open("w") as lock:
+        fcntl.flock(lock, fcntl.LOCK_EX)
+        if APP_DIR.exists():
+            shutil.rmtree(APP_DIR, ignore_errors=True)
+        os.rename(tmp_app_dir, APP_DIR)
+
     binary.unlink(missing_ok=True)
 
     print(f"Built {APP_DIR}")

@@ -440,11 +440,12 @@ struct SidebarButton: View {
                 }
                 Spacer()
             }
-            .padding(.horizontal, 10)
-            .padding(.vertical, 9)
+            .frame(maxWidth: .infinity, minHeight: 52, alignment: .leading)
+            .padding(.horizontal, 12)
             .opacity(isEnabled ? 1 : 0.55)
             .background(isSelected ? Color.black.opacity(0.08) : Color.clear)
-            .clipShape(RoundedRectangle(cornerRadius: 10))
+            .clipShape(RoundedRectangle(cornerRadius: 12))
+            .contentShape(RoundedRectangle(cornerRadius: 12))
         }
         .buttonStyle(.plain)
     }
@@ -492,16 +493,7 @@ struct HeaderView: View {
     let availableWidth: CGFloat
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Button {
-                model.statusText = "Ready"
-            } label: {
-                Label("Back", systemImage: "chevron.left")
-                    .font(.callout)
-            }
-            .buttonStyle(.plain)
-            .foregroundStyle(.secondary)
-
+        VStack(alignment: .leading, spacing: 0) {
             HStack(alignment: .firstTextBaseline) {
                 Text(model.mode.title)
                     .font(.system(size: availableWidth < 560 ? 28 : 34, weight: .semibold))
